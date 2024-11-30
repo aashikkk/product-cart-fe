@@ -9,6 +9,7 @@ import React, { useEffect, useState } from "react";
 import {
     addToFavourite,
     removeFromFavourite,
+    deleteProduct,
 } from "../redux/features/product/productSlice";
 import { useDispatch } from "react-redux";
 
@@ -21,6 +22,10 @@ const ProductTable = ({ product }) => {
 
     const dispatch = useDispatch();
     const [starredItems, setStarredItems] = useState({});
+
+    const handleDelete = (id) => {
+        dispatch(deleteProduct(id));
+    };
 
     const handleStarClick = (item) => {
         if (!item || !item._id) return; // Guard clause for invalid items
@@ -82,10 +87,8 @@ const ProductTable = ({ product }) => {
                             <Table.Cell>{item.name}</Table.Cell>
                             <Table.Cell>${item.price}</Table.Cell>
                             <Table.Cell className="space-x-1 px-0">
-                                <button>
-                                    <Link to={`/delete/${item._id}`}>
-                                        <img src={deleteIcon} alt="Delete" />
-                                    </Link>
+                                <button onClick={() => handleDelete(item._id)}>
+                                    <img src={deleteIcon} alt="Delete" />
                                 </button>
                                 <button>
                                     <Link to={`/edit/${item._id}`}>
