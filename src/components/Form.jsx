@@ -54,6 +54,7 @@ const Form = ({ initialValues, onSubmit }) => {
     };
 
     const handleSubmit = async (e) => {
+        // e.preventDefault();
         // Prepare FormData for submission
         const data = new FormData();
         Object.keys(formData).forEach((key) => {

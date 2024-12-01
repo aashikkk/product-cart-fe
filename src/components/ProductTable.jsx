@@ -4,7 +4,6 @@ import deleteIcon from "../assets/icons/delete-icon.svg";
 import editIcon from "../assets/icons/edit-icon.svg";
 import starIcon from "../assets/icons/star.svg";
 import starredIcon from "../assets/icons/starred.svg";
-import productImg from "../assets/images/product-img.png";
 import React, { useEffect, useState } from "react";
 import {
     addToFavourite,
@@ -80,7 +79,10 @@ const ProductTable = ({ product }) => {
                             <Table.Cell>
                                 <img
                                     className="w-20 h-20"
-                                    src={item.image || productImg}
+                                    src={
+                                        `../src/images/${item.images[0]}` ||
+                                        productImg
+                                    }
                                     alt={item.name}
                                 />
                             </Table.Cell>
