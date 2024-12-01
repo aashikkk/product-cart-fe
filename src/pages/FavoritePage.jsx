@@ -3,6 +3,7 @@ import StarredIcon from "../assets/icons/starred.svg";
 import SearchBar from "../components/SearchBar";
 import ProductTable from "../components/ProductTable";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 const FavoritePage = () => {
     const favouriteProducts = useSelector(
@@ -24,9 +25,11 @@ const FavoritePage = () => {
 
                 {/* New product & Fav */}
                 <div className="flex items-center justify-center">
-                    <button className="bg-primary text-white rounded-md font-bold h-12 md:w-48 w-20 flex items-center justify-center mr-4">
-                        New Product
-                    </button>
+                    <Link to="/create">
+                        <button className="bg-primary text-white rounded-md font-bold h-12 md:w-48 w-20 flex items-center justify-center mr-4">
+                            New Product
+                        </button>
+                    </Link>
                     <button className="border border-primary rounded-md h-12 md:w-18 w-16 flex items-center justify-center">
                         <img
                             src={StarredIcon}

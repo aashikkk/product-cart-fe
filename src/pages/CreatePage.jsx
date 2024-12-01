@@ -6,6 +6,7 @@ import { createProduct } from "../redux/features/product/productSlice";
 
 const CreatePage = () => {
     const dispatch = useDispatch();
+
     const handleSubmit = (formData) => {
         dispatch(createProduct(formData))
             .unwrap()

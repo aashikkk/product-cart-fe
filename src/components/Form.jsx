@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { Button, Checkbox, Label, Textarea, TextInput } from "flowbite-react";
+import { Label, Textarea, TextInput } from "flowbite-react";
 import { useDispatch } from "react-redux";
 import { createProduct } from "../redux/features/product/productSlice";
 
 const Form = ({ initialValues, onSubmit }) => {
     const [formData, setFormData] = useState({
         sku: "",
-        quantity: "",
-        name: "",
-        price: "",
-        description: "",
         images: [],
+        name: "",
+        quantity: "",
+        description: "",
+        price: "",
     });
 
     useEffect(() => {
@@ -35,14 +35,23 @@ const Form = ({ initialValues, onSubmit }) => {
 
     const handleImageChange = (e) => {
         const files = Array.from(e.target.files); // Convert FileList to array
-        setSelectedImages((prevImages) => [...prevImages, ...files]); // Merge new images with existing
-        setFormData((prevData) => ({
-            ...prevData,
-            images: [...prevData.images, ...files], // Update formData images
-        }));
+        const updatedSelectedImages = [...selectedImages, ...files]; // Merge new images with existing
+        const updatedFormData = {
+            ...formData,
+            images: [...formData.images, ...files], // Update formData images
+        };
+        setSelectedImages(updatedSelectedImages);
+        setFormData(updatedFormData);
+        // console.log(files);
+        // console.log(
+        //     "select",
+        //     updatedSelectedImages,
+        //     "formData",
+        //     updatedFormData
+        // );
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         // Prepare FormData for submission
@@ -61,16 +70,21 @@ const Form = ({ initialValues, onSubmit }) => {
         for (let [key, value] of data.entries()) {
             console.log(`${key}: ${value}`);
         }
+        // console.log(...data.entries());
 
         // Dispatch with FormData
-        dispatch(createProduct(data))
-            .unwrap()
-            .then(() => {
-                console.log("Product created successfully");
-            })
-            .catch((error) => {
-                console.error("Failed to create product: ", error);
-            });
+        if (onSubmit) {
+            onSubmit(data);
+        } else {
+            dispatch(createProduct(data))
+                .unwrap()
+                .then(() => {
+                    console.log("Product created successfully");
+                })
+                .catch((error) => {
+                    console.error("Failed to create product: ", error);
+                });
+        }
     };
 
     return (
