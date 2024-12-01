@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "../../../axios.js";
+import axios from "../../../axios";
 
 const initialState = {
     productItems: [],
@@ -11,7 +11,7 @@ const initialState = {
 };
 
 export const fetchProducts = createAsyncThunk(
-    "products/fetchProdcuts",
+    "products/fetchProducts",
     async () => {
         const response = await axios.get("/api/products");
         return response.data.data;
@@ -51,7 +51,6 @@ export const createProduct = createAsyncThunk(
                 },
             });
 
-            // Check if the response status is 201 (created)
             if (response.status !== 201) {
                 throw new Error(
                     response.data.message || "Failed to create product"
@@ -60,20 +59,19 @@ export const createProduct = createAsyncThunk(
 
             return response.data.data;
         } catch (error) {
-            // If the error is from the server, capture and return the error message
             if (error.response) {
-                // Server responded with an error status
-                console.error("Server error:", error.response.data);
-                return error.response.data.message || "Server error";
+                // The request was made and the server responded with a status code
+                // that falls out of the range of 2xx
+                console.log("Server error ,data:", error.response.data);
+                console.log(error.response.status);
+                console.log(error.response.headers);
             } else if (error.request) {
-                // The request was made, but no response was received
-                console.error("Request error:", error.request);
-                return "No response from the server";
+                console.log(error.request);
             } else {
-                // Something happened in setting up the request
-                console.error("Error message:", error.message);
-                return error.message || "Unknown error occurred";
+                // Something happened in setting up the request that triggered an Error
+                console.log("Error", error.message);
             }
+            console.log(error.config);
         }
     }
 );

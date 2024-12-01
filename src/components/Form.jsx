@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Label, Textarea, TextInput } from "flowbite-react";
 import { useDispatch } from "react-redux";
 import { createProduct } from "../redux/features/product/productSlice";
+import { useNavigate } from "react-router-dom";
 
 const Form = ({ initialValues, onSubmit }) => {
     const [formData, setFormData] = useState({
@@ -22,6 +23,7 @@ const Form = ({ initialValues, onSubmit }) => {
     const [selectedImages, setSelectedImages] = useState([]); // For image previews
 
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     // console.log(formData);
 
@@ -52,8 +54,6 @@ const Form = ({ initialValues, onSubmit }) => {
     };
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
-
         // Prepare FormData for submission
         const data = new FormData();
         Object.keys(formData).forEach((key) => {
@@ -74,9 +74,9 @@ const Form = ({ initialValues, onSubmit }) => {
 
         // Dispatch with FormData
         if (onSubmit) {
-            onSubmit(data);
+            onSubmit(formData);
         } else {
-            dispatch(createProduct(data))
+            dispatch(createProduct(formData))
                 .unwrap()
                 .then(() => {
                     console.log("Product created successfully");
@@ -85,10 +85,15 @@ const Form = ({ initialValues, onSubmit }) => {
                     console.error("Failed to create product: ", error);
                 });
         }
+        navigate("/");
     };
 
     return (
-        <form className="flex max-w-5xl flex-col gap-4" onSubmit={handleSubmit}>
+        <form
+            className="flex max-w-5xl flex-col gap-4"
+            encType="multipart/form-data"
+            onSubmit={handleSubmit}
+        >
             {/* SKU & QTY */}
             <div className="flex space-x-5 items-center justify-between">
                 <div className="mb-2 flex space-x-7 items-center">
@@ -203,7 +208,7 @@ const Form = ({ initialValues, onSubmit }) => {
                             htmlFor="image"
                             className="underline text-primary font-medium cursor-pointer"
                         >
-                            Add Images
+                            {initialValues ? "Edit Images" : "Add Images"}
                         </label>
                     </div>
 
