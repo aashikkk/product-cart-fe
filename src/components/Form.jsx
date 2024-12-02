@@ -16,11 +16,23 @@ const Form = ({ initialValues, onSubmit }) => {
 
     useEffect(() => {
         if (initialValues) {
-            setFormData(initialValues);
+            const filteredValues = {
+                sku: initialValues.sku || "",
+                images: initialValues.images || [],
+                name: initialValues.name || "",
+                quantity: initialValues.quantity || "",
+                description: initialValues.description || "",
+                price: initialValues.price || "",
+            };
+            setFormData(filteredValues);
+            setExistingImages(initialValues.images || []);
         }
     }, [initialValues]);
 
+    const [existingImages, setExistingImages] = useState([]); // For existing images
     const [selectedImages, setSelectedImages] = useState([]); // For image previews
+    console.log(selectedImages);
+    console.log(existingImages);
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -44,17 +56,11 @@ const Form = ({ initialValues, onSubmit }) => {
         };
         setSelectedImages(updatedSelectedImages);
         setFormData(updatedFormData);
-        // console.log(files);
-        // console.log(
-        //     "select",
-        //     updatedSelectedImages,
-        //     "formData",
-        //     updatedFormData
-        // );
     };
 
     const handleSubmit = async (e) => {
-        // e.preventDefault();
+        e.preventDefault();
+
         // Prepare FormData for submission
         const data = new FormData();
         Object.keys(formData).forEach((key) => {
@@ -213,6 +219,34 @@ const Form = ({ initialValues, onSubmit }) => {
                         </label>
                     </div>
 
+                    {/* If image exists */}
+                    {existingImages.length > 0 && (
+                        <div
+                            className={`mt-4 grid gap-4 ${
+                                existingImages.length === 1
+                                    ? "grid-cols-1"
+                                    : existingImages.length === 2
+                                    ? "grid-cols-2"
+                                    : existingImages.length === 3
+                                    ? "grid-cols-3"
+                                    : "grid-cols-4"
+                            }`}
+                        >
+                            {existingImages.map((image, index) => (
+                                <div
+                                    key={index}
+                                    className="w-24 h-24 border border-gray-300 rounded-md overflow-hidden"
+                                >
+                                    <img
+                                        src={`../src/images/${image}`} // Preview existing image
+                                        alt={`Existing Preview ${index}`}
+                                        className="w-full h-full object-cover"
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    )}
+
                     {/* Preview Selected Images */}
                     {selectedImages.length > 0 && (
                         <div className="mt-4 grid grid-cols-4 gap-4">
@@ -223,7 +257,7 @@ const Form = ({ initialValues, onSubmit }) => {
                                 >
                                     <img
                                         src={URL.createObjectURL(image)} // Preview image
-                                        alt={`Preview ${index}`}
+                                        alt={`Selected Preview ${index}`}
                                         className="w-full h-full object-cover"
                                     />
                                 </div>
