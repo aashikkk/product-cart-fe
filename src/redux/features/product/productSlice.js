@@ -31,19 +31,7 @@ export const getProductById = createAsyncThunk(
 
 export const createProduct = createAsyncThunk(
     "products/createProduct",
-    async (newProduct) => {
-        const formData = new FormData();
-
-        Object.keys(newProduct).forEach((key) => {
-            if (key === "images") {
-                newProduct[key].forEach((image) => {
-                    formData.append("images", image);
-                });
-            } else {
-                formData.append(key, newProduct[key]);
-            }
-        });
-
+    async (formData) => {
         try {
             const response = await axios.post("/api/products", formData, {
                 headers: {

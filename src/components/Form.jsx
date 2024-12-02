@@ -31,8 +31,8 @@ const Form = ({ initialValues, onSubmit }) => {
 
     const [existingImages, setExistingImages] = useState([]); // For existing images
     const [selectedImages, setSelectedImages] = useState([]); // For image previews
-    console.log(selectedImages);
-    console.log(existingImages);
+    // console.log(selectedImages);
+    // console.log(existingImages);
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -81,17 +81,18 @@ const Form = ({ initialValues, onSubmit }) => {
 
         // Dispatch with FormData
         if (onSubmit) {
-            onSubmit(formData);
-        } else {
-            dispatch(createProduct(formData))
-                .unwrap()
-                .then(() => {
-                    console.log("Product created successfully");
-                })
-                .catch((error) => {
-                    console.error("Failed to create product: ", error);
-                });
+            onSubmit(data);
         }
+        // else {
+        //     dispatch(createProduct(data))
+        //         .unwrap()
+        //         .then(() => {
+        //             console.log("Product created successfully");
+        //         })
+        //         .catch((error) => {
+        //             console.error("Failed to create product: ", error);
+        //         });a
+        // }
         navigate("/");
     };
 
