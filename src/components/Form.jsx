@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Label, Textarea, TextInput } from "flowbite-react";
+import { Label, Radio, Textarea, TextInput } from "flowbite-react";
 import { useNavigate } from "react-router-dom";
 
 const Form = ({ initialValues, onSubmit }) => {
@@ -11,6 +11,8 @@ const Form = ({ initialValues, onSubmit }) => {
         description: "",
         price: "",
     });
+
+    const [mainImage, setMainImage] = useState(null); // State to keep track of the main image
 
     useEffect(() => {
         if (initialValues) {
@@ -48,6 +50,10 @@ const Form = ({ initialValues, onSubmit }) => {
         setSelectedImages(updatedSelectedImages);
     };
 
+    const handleMainImageChange = (e) => {
+        setMainImage(e.target.value);
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -62,6 +68,11 @@ const Form = ({ initialValues, onSubmit }) => {
                 data.append(key, formData[key]);
             }
         });
+
+        // Add main image to FormData
+        if (mainImage) {
+            data.append("mainImage", mainImage);
+        }
 
         // Log FormData for debugging
         for (let [key, value] of data.entries()) {
@@ -209,13 +220,21 @@ const Form = ({ initialValues, onSubmit }) => {
                             {existingImages.map((image, index) => (
                                 <div
                                     key={index}
-                                    className="w-24 h-24 border border-gray-300 rounded-md overflow-hidden"
+                                    className="w-24 h-32 border-none border-gray-300 rounded-md overflow-hidden"
                                 >
                                     <img
                                         src={`../src/images/${image}`} // Preview existing image
                                         alt={`Existing Preview ${index}`}
-                                        className="w-full h-full object-cover"
+                                        className="w-full h-24 object-cover"
                                     />
+                                    <div className="flex justify-center mt-2">
+                                        <Radio
+                                            name="mainImage"
+                                            value={image}
+                                            checked={mainImage === image}
+                                            onChange={handleMainImageChange}
+                                        />
+                                    </div>
                                 </div>
                             ))}
                         </div>
@@ -227,13 +246,21 @@ const Form = ({ initialValues, onSubmit }) => {
                             {selectedImages.map((image, index) => (
                                 <div
                                     key={index}
-                                    className="w-24 h-24 border border-gray-300 rounded-md overflow-hidden"
+                                    className="w-24 h-32 border-none border-gray-300 rounded-md overflow-hidden"
                                 >
                                     <img
                                         src={URL.createObjectURL(image)} // Preview image
                                         alt={`Selected Preview ${index}`}
-                                        className="w-full h-full object-cover"
+                                        className="w-full h-24 object-cover"
                                     />
+                                    <div className="flex justify-center mt-2">
+                                        <Radio
+                                            name="mainImage"
+                                            value={image}
+                                            checked={mainImage === image}
+                                            onChange={handleMainImageChange}
+                                        />
+                                    </div>
                                 </div>
                             ))}
                         </div>

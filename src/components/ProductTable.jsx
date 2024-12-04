@@ -8,7 +8,6 @@ import React, { useEffect, useState } from "react";
 import {
     addToFavourite,
     removeFromFavourite,
-    deleteProduct,
 } from "../redux/features/product/productSlice";
 import { useDispatch } from "react-redux";
 
@@ -79,10 +78,9 @@ const ProductTable = ({ product, onDelete }) => {
                             <Table.Cell>
                                 <img
                                     className="w-20 h-20"
-                                    src={
-                                        `../src/images/${item.images[0]}` ||
-                                        productImg
-                                    }
+                                    src={`../src/images/${
+                                        item.mainImage || item.images[0]
+                                    }`}
                                     alt={item.name}
                                 />
                             </Table.Cell>
