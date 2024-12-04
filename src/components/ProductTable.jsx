@@ -10,6 +10,7 @@ import {
     removeFromFavourite,
 } from "../redux/features/product/productSlice";
 import { useDispatch } from "react-redux";
+import DeletePopUp from "./DeletePopUp";
 
 const ProductTable = ({ product, onDelete }) => {
     useEffect(() => {
@@ -20,10 +21,6 @@ const ProductTable = ({ product, onDelete }) => {
 
     const dispatch = useDispatch();
     const [starredItems, setStarredItems] = useState({});
-
-    const handleDelete = (id) => {
-        onDelete(id);
-    };
 
     const handleStarClick = (item) => {
         if (!item || !item._id) return; // Guard clause for invalid items
@@ -47,11 +44,23 @@ const ProductTable = ({ product, onDelete }) => {
         } else {
             dispatch(addToFavourite(item));
         }
-        // setStarredItems((prev) => ({
-        //     ...prev,
-        //     [item._id]: !isStarred,
-        // }));
-        console.log("Fav", starredItems);
+        // console.log("Fav", starredItems);
+    };
+
+    // Delete Popup
+    const [openModal, setOpenModal] = useState(false);
+    const [selectedDltItemId, setSelectedDltItemId] = useState(null);
+
+    const handleDeleteClick = (id) => {
+        setSelectedDltItemId(id);
+        setOpenModal(true);
+    };
+
+    const confirmDelete = () => {
+        if (selectedDltItemId) {
+            onDelete(selectedDltItemId);
+            setOpenModal(false);
+        }
     };
 
     return (
@@ -87,7 +96,9 @@ const ProductTable = ({ product, onDelete }) => {
                             <Table.Cell>{item.name}</Table.Cell>
                             <Table.Cell>${item.price}</Table.Cell>
                             <Table.Cell className="space-x-1 px-0">
-                                <button onClick={() => handleDelete(item._id)}>
+                                <button
+                                    onClick={() => handleDeleteClick(item._id)}
+                                >
                                     <img src={deleteIcon} alt="Delete" />
                                 </button>
                                 <button>
@@ -110,6 +121,11 @@ const ProductTable = ({ product, onDelete }) => {
                     ))}
                 </Table.Body>
             </Table>
+            <DeletePopUp
+                openModal={openModal}
+                setOpenModal={setOpenModal}
+                onConfirm={confirmDelete}
+            />
         </div>
     );
 };
