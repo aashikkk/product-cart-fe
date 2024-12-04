@@ -12,7 +12,7 @@ import {
 } from "../redux/features/product/productSlice";
 import { useDispatch } from "react-redux";
 
-const ProductTable = ({ product }) => {
+const ProductTable = ({ product, onDelete }) => {
     useEffect(() => {
         const storedItems =
             JSON.parse(localStorage.getItem("starredItems")) || {};
@@ -23,7 +23,7 @@ const ProductTable = ({ product }) => {
     const [starredItems, setStarredItems] = useState({});
 
     const handleDelete = (id) => {
-        dispatch(deleteProduct(id));
+        onDelete(id);
     };
 
     const handleStarClick = (item) => {

@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Label, Textarea, TextInput } from "flowbite-react";
-import { useDispatch } from "react-redux";
-import { createProduct } from "../redux/features/product/productSlice";
 import { useNavigate } from "react-router-dom";
 
 const Form = ({ initialValues, onSubmit }) => {
@@ -34,10 +32,7 @@ const Form = ({ initialValues, onSubmit }) => {
     // console.log(selectedImages);
     // console.log(existingImages);
 
-    const dispatch = useDispatch();
     const navigate = useNavigate();
-
-    // console.log(formData);
 
     const handleChange = (e) => {
         const { id, value } = e.target;
@@ -50,12 +45,7 @@ const Form = ({ initialValues, onSubmit }) => {
     const handleImageChange = (e) => {
         const files = Array.from(e.target.files); // Convert FileList to array
         const updatedSelectedImages = [...selectedImages, ...files]; // Merge new images with existing
-        const updatedFormData = {
-            ...formData,
-            images: [...formData.images, ...files], // Update formData images
-        };
         setSelectedImages(updatedSelectedImages);
-        setFormData(updatedFormData);
     };
 
     const handleSubmit = async (e) => {
@@ -65,7 +55,7 @@ const Form = ({ initialValues, onSubmit }) => {
         const data = new FormData();
         Object.keys(formData).forEach((key) => {
             if (key === "images") {
-                formData[key].forEach((image) => {
+                selectedImages.forEach((image) => {
                     data.append("images", image);
                 });
             } else {
@@ -77,31 +67,14 @@ const Form = ({ initialValues, onSubmit }) => {
         for (let [key, value] of data.entries()) {
             console.log(`${key}: ${value}`);
         }
-        // console.log(...data.entries());
 
-        // Dispatch with FormData
-        if (onSubmit) {
-            onSubmit(data);
-        }
-        // else {
-        //     dispatch(createProduct(data))
-        //         .unwrap()
-        //         .then(() => {
-        //             console.log("Product created successfully");
-        //         })
-        //         .catch((error) => {
-        //             console.error("Failed to create product: ", error);
-        //         });a
-        // }
+        onSubmit(data);
+
         navigate("/");
     };
 
     return (
-        <form
-            className="flex max-w-5xl flex-col gap-4"
-            encType="multipart/form-data"
-            onSubmit={handleSubmit}
-        >
+        <form className="flex max-w-5xl flex-col gap-4" onSubmit={handleSubmit}>
             {/* SKU & QTY */}
             <div className="flex space-x-5 items-center justify-between">
                 <div className="mb-2 flex space-x-7 items-center">

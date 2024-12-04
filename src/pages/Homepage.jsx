@@ -5,7 +5,7 @@ import ProductTable from "../components/ProductTable";
 import SearchBar from "../components/SearchBar";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProducts } from "../redux/features/product/productSlice";
+import { deleteProduct, fetchProducts } from "../redux/features/product/productSlice";
 
 const Homepage = () => {
     const dispatch = useDispatch();
@@ -14,6 +14,10 @@ const Homepage = () => {
     const error = useSelector((state) => state.product.error);
 
     // console.log(productItems);
+
+    const handleDelete = (id) => {
+        dispatch(deleteProduct(id))
+    }
 
     useEffect(() => {
         if (productStatus === "idle") {
@@ -60,7 +64,7 @@ const Homepage = () => {
 
             {/* Product table */}
             <div>
-                <ProductTable product={productItems} />
+                <ProductTable product={productItems} onDelete={handleDelete}/>
             </div>
         </div>
     );

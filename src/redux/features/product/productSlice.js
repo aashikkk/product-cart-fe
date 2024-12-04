@@ -51,27 +51,17 @@ export const createProduct = createAsyncThunk(
                 // The request was made and the server responded with a status code
                 // that falls out of the range of 2xx
                 console.log("Server error ,data:", error.response.data);
-                console.log(error.response.status);
-                console.log(error.response.headers);
+                console.log(error.response.data.message || "Server error");
             } else if (error.request) {
                 console.log(error.request);
+                throw new Error("No response from the server");
             } else {
                 // Something happened in setting up the request that triggered an Error
                 console.log("Error", error.message);
+                throw new Error(error.message || "Unknown error occurred");
             }
             console.log(error.config);
         }
-    }
-);
-
-export const deleteProduct = createAsyncThunk(
-    "products/deleteProduct",
-    async (pid) => {
-        const response = await axios.delete(`/api/products/${pid}`);
-        if (!response.data.success) {
-            throw new Error(response.data.message);
-        }
-        return pid;
     }
 );
 
@@ -83,7 +73,7 @@ export const updateProduct = createAsyncThunk(
             updatedProduct,
             {
                 headers: {
-                    "Content-Type": "application/json",
+                    "Content-Type": "multipart/form-data",
                 },
             }
         );
@@ -92,6 +82,17 @@ export const updateProduct = createAsyncThunk(
             throw new Error(response.data.message);
         }
         return response.data.data;
+    }
+);
+
+export const deleteProduct = createAsyncThunk(
+    "products/deleteProduct",
+    async (pid) => {
+        const response = await axios.delete(`/api/products/${pid}`);
+        if (!response.data.success) {
+            throw new Error(response.data.message);
+        }
+        return pid;
     }
 );
 
@@ -144,6 +145,13 @@ const productSlice = createSlice({
                 state.productItems = state.productItems.filter(
                     (product) => product._id !== action.payload
                 );
+                state.favouriteItems = state.favouriteItems.filter(
+                    (product) => product._id !== action.payload
+                );
+                localStorage.setItem(
+                    "favouriteItems",
+                    JSON.stringify(state.favouriteItems)
+                );
             })
             .addCase(updateProduct.fulfilled, (state, action) => {
                 const index = state.productItems.findIndex(
@@ -151,6 +159,16 @@ const productSlice = createSlice({
                 );
                 if (index !== -1) {
                     state.productItems[index] = action.payload;
+                }
+                const favIndex = state.favouriteItems.findIndex(
+                    (product) => product._id === action.payload._id
+                );
+                if (favIndex !== -1) {
+                    state.favouriteItems[favIndex] = action.payload;
+                    localStorage.setItem(
+                        "favouriteItems",
+                        JSON.stringify(state.favouriteItems)
+                    );
                 }
             });
     },

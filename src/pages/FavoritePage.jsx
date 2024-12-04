@@ -2,10 +2,12 @@ import React, { useEffect } from "react";
 import StarredIcon from "../assets/icons/starred.svg";
 import SearchBar from "../components/SearchBar";
 import ProductTable from "../components/ProductTable";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { deleteProduct } from "../redux/features/product/productSlice";
 
 const FavoritePage = () => {
+    const dispatch = useDispatch();
     const favouriteProducts = useSelector(
         (state) => state.product.favouriteItems
     );
@@ -13,6 +15,10 @@ const FavoritePage = () => {
     useEffect(() => {
         console.log(favouriteProducts);
     }, [favouriteProducts]);
+
+    const handleDelete = (id) => {
+        dispatch(deleteProduct(id));
+    };
 
     return (
         <div className="py-10">
@@ -42,7 +48,10 @@ const FavoritePage = () => {
 
             {/* Product table */}
             <div>
-                <ProductTable product={favouriteProducts} />
+                <ProductTable
+                    product={favouriteProducts}
+                    onDelete={handleDelete}
+                />
             </div>
         </div>
     );
