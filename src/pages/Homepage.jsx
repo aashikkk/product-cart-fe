@@ -1,11 +1,14 @@
 import React, { useEffect } from "react";
 import StarredIcon from "../assets/icons/starred.svg";
-import { Button } from "flowbite-react";
+import { Button, Spinner } from "flowbite-react";
 import ProductTable from "../components/ProductTable";
 import SearchBar from "../components/SearchBar";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteProduct, fetchProducts } from "../redux/features/product/productSlice";
+import {
+    deleteProduct,
+    fetchProducts,
+} from "../redux/features/product/productSlice";
 
 const Homepage = () => {
     const dispatch = useDispatch();
@@ -16,8 +19,8 @@ const Homepage = () => {
     // console.log(productItems);
 
     const handleDelete = (id) => {
-        dispatch(deleteProduct(id))
-    }
+        dispatch(deleteProduct(id));
+    };
 
     useEffect(() => {
         if (productStatus === "idle") {
@@ -26,7 +29,15 @@ const Homepage = () => {
     }, [dispatch, productStatus]);
 
     if (productStatus === "loading") {
-        return <div>Loading...</div>;
+        return (
+            <div className="flex justify-center items-center h-screen">
+                <Spinner
+                    aria-label="Center-aligned spinner example"
+                    size="xl"
+                    color="purple"
+                />
+            </div>
+        );
     }
 
     if (productStatus === "failed") {
@@ -64,7 +75,7 @@ const Homepage = () => {
 
             {/* Product table */}
             <div>
-                <ProductTable product={productItems} onDelete={handleDelete}/>
+                <ProductTable product={productItems} onDelete={handleDelete} />
             </div>
         </div>
     );

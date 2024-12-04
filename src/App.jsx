@@ -5,6 +5,7 @@ import Homepage from "./pages/Homepage";
 import CreatePage from "./pages/CreatePage";
 import FavoritePage from "./pages/FavoritePage";
 import EditPage from "./pages/EditPage";
+import SearchResultPage from "./pages/SearchResultPage";
 
 function App() {
     return (
@@ -16,6 +17,7 @@ function App() {
                     <Route path="/create" element={<CreatePage />} />
                     <Route path="/starred" element={<FavoritePage />} />
                     <Route path="/edit/:id" element={<EditPage />} />
+                    <Route path="/search" element={<SearchResultPage />} />
                 </Routes>
             </main>
         </>

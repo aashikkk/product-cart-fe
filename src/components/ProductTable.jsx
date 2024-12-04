@@ -82,7 +82,7 @@ const ProductTable = ({ product, onDelete }) => {
                             className="bg-white dark:border-gray-700 dark:bg-gray-800"
                         >
                             <Table.Cell className="whitespace-nowrap dark:text-white opacity-50 uppercase">
-                                {item.sku}
+                                #{item.sku}
                             </Table.Cell>
                             <Table.Cell>
                                 <img
