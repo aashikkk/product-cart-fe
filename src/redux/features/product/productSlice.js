@@ -96,6 +96,28 @@ export const deleteProduct = createAsyncThunk(
     }
 );
 
+export const addFavoriteProduct = createAsyncThunk(
+    "products/addFavoriteProduct",
+    async ({ userId, productId }) => {
+        const response = await axios.post("/api/products/favorites/add", {
+            userId,
+            productId,
+        });
+        return response.data.data;
+    }
+);
+
+export const removeFavoriteProduct = createAsyncThunk(
+    "products/removeFavoriteProduct",
+    async ({ userId, productId }) => {
+        const response = await axios.post("/api/products/favorites/remove", {
+            userId,
+            productId,
+        });
+        return response.data.data;
+    }
+);
+
 const productSlice = createSlice({
     name: "product",
     initialState,

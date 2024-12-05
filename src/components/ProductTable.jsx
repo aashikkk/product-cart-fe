@@ -21,11 +21,14 @@ const ProductTable = ({ product, onDelete }) => {
 
     const dispatch = useDispatch();
     const [starredItems, setStarredItems] = useState({});
+    // const userId = useSelector((state) => state.user.id); // Assuming user ID is stored in the state
 
     const handleStarClick = (item) => {
         if (!item || !item._id) return; // Guard clause for invalid items
 
         const isStarred = starredItems[item._id];
+        // const productId = item._id;
+
         // Toggle starred state
         const updatedStarredItems = {
             ...starredItems,
@@ -41,8 +44,10 @@ const ProductTable = ({ product, onDelete }) => {
 
         if (isStarred) {
             dispatch(removeFromFavourite(item));
+            // dispatch(removeFavoriteProduct({ userId, productId }));
         } else {
             dispatch(addToFavourite(item));
+            // dispatch(addFavoriteProduct({ userId, productId }));
         }
         // console.log("Fav", starredItems);
     };

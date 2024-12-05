@@ -49,7 +49,7 @@ const Homepage = () => {
             <h1 className="text-4xl font-black tracking-widest leading-10 pb-12">
                 PRODUCTS
             </h1>
-            <div className="flex justify-between items-center">
+            <div className="flex flex-wrap justify-between items-center">
                 {/* searchbar */}
                 <SearchBar />
 

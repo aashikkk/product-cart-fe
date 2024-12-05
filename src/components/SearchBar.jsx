@@ -50,8 +50,8 @@ const SearchBar = () => {
     };
 
     return (
-        <div className="flex flex-col relative" ref={searchBarRef}>
-            <div className="relative items-center justify-center">
+        <div className="flex flex-col relative mb-2" ref={searchBarRef}>
+            <div className="relative flex-wrap items-center justify-center">
                 <input
                     type="text"
                     className="border border-gray-300 font-medium bg-InnerBG text-Innertext rounded-full h-16 pl-5 md:w-[600px] w-[300px] pr-16"
